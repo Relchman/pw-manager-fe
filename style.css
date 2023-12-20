@@ -64,12 +64,44 @@ body {
     cursor: pointer;
   }
 
-  .message {
+  .p-message {
     position: fixed;
     top: 10px;
     right: 10px;
     z-index: 1000;
     width: 500px;
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  /* .p-message {
+    display: inline-block;
+    padding: 1em;
+    margin: 1em 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+    color: #333;
+  } */
+  
+  .p-message.success {
+    border-color: #4caf50;
+    background-color: #dff0d8;
+    color: #4caf50;
+  }
+  
+  .p-message.error {
+    border-color: #d9534f;
+    background-color: #f2dede;
+    color: #d9534f;
+  }
+  
+  .p-message.warning {
+    border-color: #f0ad4e;
+    background-color: #fcf8e3;
+    color: #f0ad4e;
   }
 
   @keyframes spin {
