@@ -1,4 +1,4 @@
-# Cadastro de Colaboradores
+# Cadastro de Colaboradores (pw-manager-fe)
 
 Repositório frontend do projeto de Cadastro de colaboradores
 
