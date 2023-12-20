@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+  <head>
+    <title>Hierarquia de Colaboradores App</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+
+    <!-- Script Principal-->
+    <script>
+      angular
+        .module("myApp", [])
+        .controller("EmployeeController", function ($scope, $http) {
+          $scope.apiData = [];
+          $scope.getBackgroundColorStatusSenha = function (score) {
+            if (score < 26) {
+              return "red";
+            }
+            if (score > 25 && score <= 50) {
+              return "rgb(199, 188, 28)";
+            }
+            if (score > 50 && score <= 75) {
+              return "green";
+            }
+            if (score > 75 && score <= 100) {
+              return "rgb(14, 226, 14)";
+            } else {
+              return "gray";
+            }
+          };
+          function statusScore(score) {
+            if (score < 26) {
+              return "Ruim";
+            }
+            if (score > 25 && score <= 50) {
+              return "Mediana";
+            }
+            if (score > 50 && score <= 75) {
+              return "Bom";
+            }
+            if (score > 75 && score <= 100) {
+              return "Forte";
+            } else {
+              return "Erro";
+            }
+          }
+          function flattenEmployees(employeeList) {
+            var flattenedList = [];
+
+            function flatten(employee) {
+              var flattenedEmployee = {
+                id: employee.id,
+                name: employee.name,
+                score: employee.score,
+                st_senha: statusScore(employee.score),
+              };
+
+              flattenedList.push(flattenedEmployee);
+
+              if (employee.subordinados && employee.subordinados.length > 0) {
+                employee.subordinados.forEach((subordinate) =>
+                  flatten(subordinate)
+                );
+              }
+            }
+
+            employeeList.forEach((employee) => flatten(employee));
+
+            return flattenedList;
+          }
+
+          // Chamadas HTTP GET e POST.
+          $http
+            .get("http://localhost:8080/employee/findByEmployeeSuperiorIsNull")
+            .then(function (response) {
+              $scope.apiData = response.data;
+              $scope.dataNv = flattenEmployees(response.data);
+
+              console.log($scope.apiData);
+            })
+            .catch(function (error) {
+              console.error("Erro na requisição:", error);
+            });
+          $scope.name = "";
+          $scope.password = "";
+          $scope.selectedEmployee = 0;
+
+          $scope.cadastro = function () {
+            var formData = {
+              name: $scope.name,
+              password: $scope.password,
+              employeeSuperior: $scope.selectedEmployee.id,
+            };
+
+            $http
+              .post("http://localhost:8080/employee", formData)
+              .then(function (response) {
+                $scope.responseStatus = "Cadastro realizado com sucesso!";
+                console.log(response.data);
+                // Exibir mensagem de sucesso e recarregar a página após alguns segundos
+                $scope.showSuccessMessage = true;
+                setTimeout(function () {
+                  $scope.$apply(function () {
+                    $scope.showSuccessMessage = false;
+                    // Recarregar a página
+                    location.reload();
+                  });
+                }, 3000);
+              })
+              .catch(function (error) {
+                $scope.responseStatus = "Erro ao cadastrar.";
+                console.error("Erro na solicitação:", error);
+              });
+          };
+        });
+    </script>
+  </head>
+  <body ng-app="myApp" ng-controller="EmployeeController">
+    <div ng-show="showSuccessMessage" class="message">
+      Cadastro realizado com sucesso! A página será recarregada em breve.
+    </div>
+
+    <div class="card-container">
+      <!-- Formulário -->
+      <h2>Cadastro de Hierarquia de Colaboradores</h2>
+
+      <form ng-submit="cadastro()">
+        <label for="name">Nome:</label>
+        <input type="text" id="name" ng-model="name" required />
+
+        <label for="password">Senha:</label>
+        <input type="password" id="password" ng-model="password" required />
+
+        <label for="selectedEmployee"
+          >Nome do Superior Hierárquico (caso houver):</label
+        >
+        <select
+          ng-model="selectedEmployee"
+          ng-options="employee.name for employee in dataNv"
+        >
+          <option value="employee.id"></option>
+        </select>
+
+        <button type="submit">Cadastrar</button>
+      </form>
+
+      <hr style="margin-top: 20px; margin-bottom: 20px" />
+
+      <!-- Painel da força de senha dos colaboradores-->
+      <h3>Força da Senha dos Colaboradores</h3>
+      <table>
+        <thead></thead>
+        <tbody>
+          <tr ng-repeat="row in dataNv">
+            <td style="vertical-align: middle">ID: {{row.id}} -</td>
+            <td style="width: 150px">{{ row.name }}</td>
+            <td
+              style="
+                width: 35px;
+                background-color: rgb(151, 151, 151);
+                color: white;
+                border-radius: 18%;
+                text-align: center;
+              "
+            >
+              {{ row.score }}%
+            </td>
+            <td
+              style="width: 80px"
+              ng-style="{
+                'background-color': getBackgroundColorStatusSenha(row.score),
+                'color': 'white',
+                'border-radius': '8%',
+                'text-align': 'center'
+              }"
+            >
+              {{ row.st_senha }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-container" style="margin-left: 50px">
+      <h2>Hierarquia de Funcionários</h2>
+      <div ng-include="'employee_tree.html'"></div>
+
+      <script type="text/ng-template" id="employee_tree.html">
+        <ul>
+            <li ng-repeat="employee in apiData">
+               {{ employee.name }}
+                <div ng-if="employee.subordinados && employee.subordinados.length">
+                    <div ng-include="'employee_tree.html'" ng-init="apiData = employee.subordinados"></div>
+                </div>
+            </li>
+        </ul>
+      </script>
+    </div>
+  </body>
+</html>

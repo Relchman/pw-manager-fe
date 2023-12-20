@@ -1,0 +1,79 @@
+
+li{
+  list-style: square;
+}
+
+
+input {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.38);
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s,
+  box-shadow 0.2s, background-size 0.2s cubic-bezier(0.64, 0.09, 0.08, 1);
+  border-radius: 4px;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+select{
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.38);
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s,
+  box-shadow 0.2s, background-size 0.2s cubic-bezier(0.64, 0.09, 0.08, 1);
+  border-radius: 4px;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .card-container {
+    background-color: #fff;
+    border: 1px solid #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding-right: 20px;
+    border-right-width: 20px;
+  }
+  
+  form {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    margin-left: 6px;
+  }
+  
+  button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .message {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    width: 500px;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
