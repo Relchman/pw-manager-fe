@@ -34,7 +34,7 @@ Sendo elas:
 2 - Inserção de Colaborador com Superior Hierárquico
 ```
 
-## 📦 Implantação
+## 📦 Implementação
 
 Conforme proposto no desafio, a aplicação segue os padrões solicitados
 
