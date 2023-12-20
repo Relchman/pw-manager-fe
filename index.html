@@ -96,15 +96,14 @@
               .then(function (response) {
                 $scope.responseStatus = "Cadastro realizado com sucesso!";
                 console.log(response.data);
-                // Exibir mensagem de sucesso e recarregar a página após alguns segundos
                 $scope.showSuccessMessage = true;
+
                 setTimeout(function () {
                   $scope.$apply(function () {
                     $scope.showSuccessMessage = false;
-                    // Recarregar a página
                     location.reload();
                   });
-                }, 3000);
+                }, 4000);
               })
               .catch(function (error) {
                 $scope.responseStatus = "Erro ao cadastrar.";
@@ -115,7 +114,7 @@
     </script>
   </head>
   <body ng-app="myApp" ng-controller="EmployeeController">
-    <div ng-show="showSuccessMessage" class="message">
+    <div ng-show="showSuccessMessage" class="p-message success">
       Cadastro realizado com sucesso! A página será recarregada em breve.
     </div>
 
@@ -179,6 +178,8 @@
         </tbody>
       </table>
     </div>
+
+    <!-- Painel de Hierarquia de Funcionários-->
     <div class="card-container" style="margin-left: 50px">
       <h2>Hierarquia de Funcionários</h2>
       <div ng-include="'employee_tree.html'"></div>
